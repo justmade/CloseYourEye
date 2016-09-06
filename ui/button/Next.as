@@ -1,0 +1,1 @@
+﻿package ui.button {		import flash.display.SimpleButton;			public class Next extends SimpleButton {						public function Next() {			// constructor code		}	}	}

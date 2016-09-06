@@ -6,6 +6,8 @@ package Scenes
 	
 	import mc.Roles;
 	
+	import ui.button.Next;
+	
 	public class GameBase extends Sprite
 	{
 		private var roles:Vector.<Roles>;
@@ -24,14 +26,22 @@ package Scenes
 		
 		private var currentRoleList:Dictionary;
 		
+		private var roleProgress:Dictionary;
+		
+		private var nextButton:Next;
+		
 		public function GameBase()
 		{
 			super();
 			currentRoleList = new Dictionary();
+			roleProgress   	= new Dictionary();
 			roleName 		= ["wolf","seer","witch","guard","hunter","farmer","back"];
 			roleNumber		= [4,1,1,1,1,4]
 			for(var i:int = 0; i < roleName.length-1 ; i++){
 				currentRoleList[roleName[i]] = new Array()
+			}
+			for(i = 0; i < roleName.length-1 ; i++){
+				roleProgress[roleName[i]] = 0
 			}
 			init();
 		}
@@ -57,23 +67,41 @@ package Scenes
 				roleCard.displayNumber()
 				
 				
-				roleCard.addEventListener(MouseEvent.CLICK , onClickCard)
+				roleCard.addEventListener(MouseEvent.CLICK , onClickCard);
 			}
 			
+			nextButton = new Next();
+			this.addChild(nextButton);
+			nextButton.x = Main.view.width/2;
+			nextButton.y = Main.view.height - nextButton.height - 50
+			nextButton.addEventListener(MouseEvent.CLICK , onNext)
+			nextButton.visible = false
 		}
 		
 		private function onClickCard(e:MouseEvent):void{
 			if(nightIndex == 1){
 				var role:String = roleName[roleIndex];
 				var target:Roles = e.currentTarget as Roles
-			
-				if(target.status == 0){
-					var canPush:Boolean = this.markPlayerRole(role,target.playerNumber)						
-					if(canPush)target.setIdentity(role)						
-				}else{
-					this.unMarkPlayerRole(target.identity , target.playerNumber)
-					target.setIdentity("back")
-				}	
+				if(roleProgress[role] == 0){
+					if(target.status == 0){
+						var canPush:Boolean = this.markPlayerRole(role,target.playerNumber)						
+						if(canPush)target.setIdentity(role)						
+					}else{
+						this.unMarkPlayerRole(target.identity , target.playerNumber)
+						target.setIdentity("back")
+					}
+					//如果角色卡还处于认身份阶段，出现next按钮
+					var index:int  = roleName.indexOf(role);
+					var max:int    = roleNumber[index];
+					if(currentRoleList[role].length == max ){
+						nextButton.visible = true
+					}
+					//第一次击杀
+				}else if(roleProgress[role] == 1){
+					target.setIdentity("kill")
+				}
+				
+				
 			}
 			
 			
@@ -81,6 +109,22 @@ package Scenes
 				trace(currentRoleList[roleName[i]])
 			}
 			
+		}
+		
+		private function onNext(e:MouseEvent):void{
+			var role:String = roleName[roleIndex]
+			var roleg:int = roleProgress[role]
+			//如果角色还处于认身份阶段，不进行下一个角色
+			if (roleg == 0){
+				roleProgress[role] ++ ;
+				nextButton.visible = false
+				for(var i:int = 0 ; i < roles.length ; i++){
+					roles[i].turnOff();
+				}
+					
+			}else{
+				
+			}
 		}
 		
 		//标记每个角色号码
