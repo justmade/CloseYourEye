@@ -1,0 +1,2 @@
+﻿package  {	import flash.display.MovieClip;	import flash.geom.Rectangle;		import Scenes.GameBase;	import Scenes.Menu;
+	public class Main extends MovieClip {				private var menu:Menu;				public static var view:Rectangle = new Rectangle(0,0,1136,640)				private var gameBase:GameBase;		public function Main() {			gameBase = new GameBase();			this.addChild(gameBase)		}	}}

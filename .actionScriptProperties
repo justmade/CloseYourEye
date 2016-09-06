@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<actionScriptProperties analytics="false" mainApplicationPath="CloseYourEye.as" projectUUID="c398d2c9-a6a0-4eba-809e-ad90ac47d984" version="11">
+  <compiler additionalCompilerArguments="-locale en_US" advancedTelemetry="false" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="" strict="true" targetPlayerVersion="18.0.0" useApolloConfig="false" useDebugRSLSwfs="true" useFlashSDK="true" verifyDigests="true" warn="true">
+    <compilerSourcePath/>
+    <libraryPath defaultLinkType="0">
+      <libraryPathEntry kind="3" linkType="1" path="${FLASHPRO_APPCONFIG}/ActionScript 3.0/FP11.2/playerglobal.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="1" linkType="1" path="${FLASHPRO_APPCONFIG}/ActionScript 3.0/libs"/>
+      <libraryPathEntry kind="3" linkType="1" path="${FLASHPRO_APPCONFIG}/ActionScript 3.0/libs/11.0/textLayout.swc" useDefaultLinkType="false"/>
+    </libraryPath>
+    <sourceAttachmentPath>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/flex.swc" sourcepath="${PROJECT_FRAMEWORKS}/projects/flex/src" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/utilities.swc" sourcepath="${PROJECT_FRAMEWORKS}/projects/utilities/src" useDefaultLinkType="false"/>
+    </sourceAttachmentPath>
+  </compiler>
+  <applications>
+    <application path="CloseYourEye.as"/>
+  </applications>
+  <modules/>
+  <workers/>
+  <buildCSSFiles/>
+  <flashCatalyst validateFlashCatalystCompatibility="false"/>
+</actionScriptProperties>
