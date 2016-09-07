@@ -150,11 +150,13 @@ package Scenes
 			var roleg:int = roleProgress[role]
 			//如果角色还处于认身份阶段，不进行下一个角色
 			if (roleg == 0){
+				roleProgress[role] ++ ;
+				nextButton.visible = false
+				turnOffAllCards();
 				if(role == Roles.WOLF){
-					roleProgress[role] ++ ;
-					nextButton.visible = false
-					turnOffAllCards();
 					setDialogue("狼人选择目标")
+				}else if(role == Roles.WITCH){
+					setDialogue("昨天晚上"+lastWolfKill.playerNumber+"死了，你是否救？");
 				}
 			}else{
 				
