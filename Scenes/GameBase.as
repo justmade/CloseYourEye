@@ -10,6 +10,7 @@ package Scenes
 	
 	import mc.Roles;
 	
+	import ui.SelecetionGroup;
 	import ui.button.Next;
 	
 	public class GameBase extends Sprite
@@ -40,11 +41,31 @@ package Scenes
 		//狼人上一个击杀的对象
 		private var lastWolfKill:Roles = null;
 		
+		//女巫击杀的对象
+		private var witchKill:Roles = null;
+		
 		//女巫上一个毒的对象
 		private var lastWitchKill:Roles = null;
 			
 		//女巫上一个救的人
 		private var lastWitchSave:Roles = null;
+		
+		//这个回合女巫是否救
+		private var witchSaved:Boolean = false;
+		
+		//巫女毒人的阶段
+		private var witchDragProgress:Boolean = false
+		
+		//女巫的毒药是否还存在
+		private var witchHasBadDrug:Boolean = true;
+		
+		//女巫的解药是否存在
+		private var witchHasGoodDrug:Boolean = true
+		
+		
+		
+		//选择yes，no的按钮
+		private var selectionGroup:SelecetionGroup;
 		
 		public function GameBase()
 		{
@@ -101,6 +122,12 @@ package Scenes
 			nextButton.y = Main.view.height - nextButton.height - 50
 			nextButton.addEventListener(MouseEvent.CLICK , onNext)
 			nextButton.visible = false
+				
+			selectionGroup = new SelecetionGroup();
+			this.addChild(selectionGroup)
+			selectionGroup.x = Main.view.width/2 - selectionGroup.width/2;
+			selectionGroup.y = Main.view.height - selectionGroup.height - 150;
+			selectionGroup.visible = false;
 		}
 		
 		private function onClickCard(e:MouseEvent):void{
@@ -123,31 +150,41 @@ package Scenes
 						}else{
 							nextButton.visible = false
 						}
-						//第一次击杀
+						
 					}else if(roleProgress[role] == 1){
-						wolfKill(target)
+						if(role ==  Roles.WOLF){
+							//狼人第一次击杀
+							lastWolfKill = wolfKill(target,lastWolfKill)
+						}else if(role ==  Roles.WITCH) {
+							//巫女救人阶段不能点击
+							if(witchDragProgress == true){
+								witchKill = wolfKill(target,witchKill)
+							}
+						}
 					}
 //				}
 			}			
 		}
 		
-		private function wolfKill(target:Roles):void{
+		private function wolfKill(target:Roles,role:Roles):Roles{
 			nextButton.visible = true
-			if(lastWolfKill == target){
-				lastWolfKill.setIdentity(Roles.BACK);
-				lastWolfKill = null
+			if(role == target){
+				role.setIdentity(Roles.BACK);
+				role = null
 			}else{
-				if(lastWolfKill != null){
-					lastWolfKill.setIdentity(Roles.BACK);
+				if(role != null){
+					role.setIdentity(Roles.BACK);
 				}
 				target.setIdentity(Roles.KILL)
-				lastWolfKill = target;
+				role = target;
 			}
+			return role
 		}
 		
 		private function onNext(e:MouseEvent):void{
 			var role:String = roleName[roleIndex]
 			var roleg:int = roleProgress[role]
+			trace(role,roleg)
 			//如果角色还处于认身份阶段，不进行下一个角色
 			if (roleg == 0){
 				roleProgress[role] ++ ;
@@ -157,6 +194,9 @@ package Scenes
 					setDialogue("狼人选择目标")
 				}else if(role == Roles.WITCH){
 					setDialogue("昨天晚上"+lastWolfKill.playerNumber+"死了，你是否救？");
+					selectionGroup.visible = true
+					selectionGroup.setYesFun(setWitchDidSaver)
+					selectionGroup.setNoFun(setWitchDidNotSaver)
 				}
 			}else{
 				
@@ -166,11 +206,42 @@ package Scenes
 					nextButton.visible = false
 					turnOffAllCards();
 					setDialogue("狼人闭眼，女巫睁眼，告诉我你的号码")
+				}else if(role == Roles.WITCH){
+					roleProgress[role] ++ ;
+					nextButton.visible = false
+					turnOffAllCards();
+					setDialogue("女巫闭眼，预言家睁眼，告诉我你的号码")
 				}
 				
 				//每次一个角色行动完成后加1
 				roleIndex ++ ;
 			}
+		}
+		
+		//女巫救的人
+		private function setWitchDidSaver():void{
+			lastWitchSave = lastWolfKill
+			witchSaved = true
+			witchHasGoodDrug = false
+				
+			selectionGroup.visible = false
+			setDialogue("告诉我你需要毒几号");
+			nextButton.visible = true;	
+			witchDragProgress = false;
+		}
+		
+		//女巫不救人
+		private function setWitchDidNotSaver():void{
+			witchSaved = false
+			
+			selectionGroup.visible = false
+			setDialogue("告诉我你需要毒几号");
+			nextButton.visible = true;
+			witchDragProgress = true
+		}
+		
+		private function setWitchKill():void{
+//			lastWitchKill = 
 		}
 		
 		//翻过所有卡牌
