@@ -1,4 +1,4 @@
-package Scenes
+﻿package Scenes
 {
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -6,7 +6,6 @@ package Scenes
 	import flash.text.TextFormat;
 	import flash.utils.Dictionary;
 	
-	import flashx.textLayout.formats.TextAlign;
 	
 	import mc.Roles;
 	
@@ -62,6 +61,9 @@ package Scenes
 		//女巫的解药是否存在
 		private var witchHasGoodDrug:Boolean = true
 		
+		//这个回合预言家是否查看
+		private var seerHasChecked:Boolean = false;
+		
 		
 		
 		//选择yes，no的按钮
@@ -82,7 +84,7 @@ package Scenes
 			}
 			
 			dialogueTF = new TextField();
-			dialogueTF.defaultTextFormat = new TextFormat(null,30,0xffffff,null,null,null,null,null,TextAlign.CENTER)
+			dialogueTF.defaultTextFormat = new TextFormat(null,30,0xffffff,null,null,null,null,null,"center")
 //			dialogueTF.
 			dialogueTF.width = Main.view.width
 			this.addChild(dialogueTF);
@@ -160,10 +162,20 @@ package Scenes
 							if(witchDragProgress == true){
 								witchKill = wolfKill(target,witchKill)
 							}
-						}
+						}else if(role ==  Roles.SEER){
+							if(seerHasChecked == false){
+								seerCheck(target)
+							}							
+						}						
 					}
 //				}
 			}			
+		}
+		
+		//预言家查看的卡牌
+		private function seerCheck(target:Roles):void{
+			target.checkRole();
+			seerHasChecked = true;
 		}
 		
 		private function wolfKill(target:Roles,role:Roles):Roles{
@@ -197,6 +209,8 @@ package Scenes
 					selectionGroup.visible = true
 					selectionGroup.setYesFun(setWitchDidSaver)
 					selectionGroup.setNoFun(setWitchDidNotSaver)
+				}else if(role == Roles.SEER){
+					setDialogue("预言家选择你需要的查看玩家")
 				}
 			}else{
 				
